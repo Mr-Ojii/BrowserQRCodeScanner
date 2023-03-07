@@ -12,7 +12,7 @@
                 return;
             }
             const videoElement = document.getElementById("video");
-            videoElement.srcObject = await navigator.mediaDevices.getUserMedia({ video: true });
+            videoElement.srcObject = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: "environment" } } });
             videoElement.onloadedmetadata = function(e) {
                 videoElement.play();
             };
