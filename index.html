@@ -15,7 +15,7 @@
                         return;
                     
                     let opt = document.createElement("option");
-                    opt.value = item.id;
+                    opt.value = item.deviceId;
                     opt.innerText = item.label;
                     select.appendChild(opt);
                 });
@@ -30,7 +30,9 @@
                 return;
             }
             const videoElement = document.getElementById("video");
-            videoElement.srcObject = await navigator.mediaDevices.getUserMedia({ video: { deviceId: document.getElementById("devices-select").value } });
+            const id = document.getElementById("devices-select").value;
+            console.log(document.getElementById("devices-select"));
+            videoElement.srcObject = await navigator.mediaDevices.getUserMedia({ video: { deviceId: id } });
             videoElement.onloadedmetadata = function(e) {
                 videoElement.play();
             };
