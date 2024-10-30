@@ -4,21 +4,25 @@
     <title>BrowserQRCodeScanner</title>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js" type="text/javascript"></script>
     <script type="text/javascript">
-        let recoged = [];
-        async function startCameraCaptureBackground()
-        {
-            if(navigator.mediaDevices.getUserMedia === undefined)
-            {
-                alert("お使いのブラウザはカメラ入力に対応していません");
-                return;
+        let devices = [];
+
+        async function enumerateDevices() {
+            if (navigator.mediaDevices.getUserMedia !== undefined) {
+                let select = document.getElementById("devices-select");
+                devices = await navigator.mediaDevices.enumerateDevices();
+                devices.forEach(item => {
+                    if (item.kind !== "videoinput")
+                        return;
+                    
+                    let opt = document.createElement("option");
+                    opt.value = item.id;
+                    opt.innerText = item.label;
+                    select.appendChild(opt);
+                });
             }
-            const videoElement = document.getElementById("video");
-            videoElement.srcObject = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: "environment" } } });
-            videoElement.onloadedmetadata = function(e) {
-                videoElement.play();
-            };
         }
-        async function startCameraCaptureForeground()
+        let recoged = [];
+        async function startCameraCapture()
         {
             if(navigator.mediaDevices.getUserMedia === undefined)
             {
@@ -26,7 +30,7 @@
                 return;
             }
             const videoElement = document.getElementById("video");
-            videoElement.srcObject = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+            videoElement.srcObject = await navigator.mediaDevices.getUserMedia({ video: { deviceId: document.getElementById("devices-select").value } });
             videoElement.onloadedmetadata = function(e) {
                 videoElement.play();
             };
@@ -99,13 +103,15 @@
             document.getElementById('result').innerHTML += tmpStr;
         }
         window.addEventListener('load', () => startTick());
+        window.addEventListener('load', () => enumerateDevices());
     </script>
 </head>
 <html>
     <p><video id="video" width="320"></video></p>
     <p>
-        <button onclick="startCameraCaptureForeground()">カメラキャプチャ(前面)</button>
-        <button onclick="startCameraCaptureBackground()">カメラキャプチャ(背面)</button>
+        <select name="devices" id="devices-select">
+        </select>
+        <button onclick="startCameraCapture()">カメラキャプチャ</button>
         <button onclick="startDisplayCapture()">画面キャプチャ</button>
     </p>
     <p>
