@@ -5,6 +5,23 @@
     <meta charset="utf-8" />
     <title>BrowserQRCodeScanner</title>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <h1>BrowserQRCodeScanner</h1>
+    <p><video id="video" width="320"></video></p>
+    <p>
+        <select name="devices" id="devices-select">
+        </select>
+        <button onclick="startCameraCapture()">カメラキャプチャ</button>
+        <button onclick="startDisplayCapture()">画面キャプチャ</button>
+    </p>
+    <p>
+        内部リサイズ<input id="target" type="number" value="1000" min="500" max="10000">px</input>
+    </p>
+    <p>解析結果</p>
+    <ul id="result"></ul>
+
     <script type="text/javascript">
         let devices = [];
 
@@ -100,25 +117,9 @@
             tmpStr = tmpStr + "</li>";
             document.getElementById('result').innerHTML += tmpStr;
         }
-        window.addEventListener('load', () => startTick());
-        window.addEventListener('load', () => enumerateDevices());
+        startTick();
+        enumerateDevices();
     </script>
-</head>
-
-<body>
-    <h1>BrowserQRCodeScanner</h1>
-    <p><video id="video" width="320"></video></p>
-    <p>
-        <select name="devices" id="devices-select">
-        </select>
-        <button onclick="startCameraCapture()">カメラキャプチャ</button>
-        <button onclick="startDisplayCapture()">画面キャプチャ</button>
-    </p>
-    <p>
-        内部リサイズ<input id="target" type="number" value="1000" min="500" max="10000">px</input>
-    </p>
-    <p>解析結果</p>
-    <ul id="result"></ul>
 </body>
 
 </html>
