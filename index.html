@@ -9,7 +9,7 @@
         let devices = [];
 
         async function enumerateDevices() {
-            if (navigator.mediaDevices.getUserMedia !== undefined) {
+            if (navigator.mediaDevices.enumerateDevices !== undefined) {
                 let select = document.getElementById("devices-select");
                 devices = await navigator.mediaDevices.enumerateDevices();
                 devices.forEach(item => {
