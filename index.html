@@ -40,6 +40,10 @@
                 });
             }
         }
+
+        // なかなかな強引実装をする
+        navigator.mediaDevices.getUserMedia({video : {}}).then(enumerateDevices);
+
         let recoged = [];
         async function startCameraCapture() {
             if (navigator.mediaDevices.getUserMedia === undefined) {
@@ -118,7 +122,6 @@
             document.getElementById('result').innerHTML += tmpStr;
         }
         startTick();
-        enumerateDevices();
     </script>
 </body>
 
