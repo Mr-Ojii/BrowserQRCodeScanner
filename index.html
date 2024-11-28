@@ -17,7 +17,17 @@
         <button onclick="startDisplayCapture()">画面キャプチャ</button>
     </p>
     <p>
+        解析間隔<input id="span" type="number" value="500" min="10" max="10000">ms</input>
+    </p>
+    <p>
         内部リサイズ<input id="target" type="number" value="1000" min="500" max="10000">px</input>
+    </p>
+    <p>
+        <label for="disp_type">表示形式</label>
+        <select name="disp_type" id="disp_type">
+            <option value="append">追加</option>
+            <option value="update">更新</option>
+        </select>
     </p>
     <p>解析結果</p>
     <ul id="result"></ul>
@@ -70,7 +80,13 @@
             };
         }
         function startTick() {
-            setTimeout(startTick, 500);
+            const spanElement = document.getElementById("span");
+            let span = Number(spanElement.value);
+            const spanMin = Number(spanElement.min);
+            const spanMax = Number(spanElement.max);
+            if (span === '' || span < spanMin || span > spanMax)
+                span = 500;
+            setTimeout(startTick, span);
             const videoElement = document.getElementById("video");
             if (videoElement.srcObject === null)
                 return;
@@ -110,6 +126,10 @@
             if (recoged.includes(str))
                 return;
 
+            const dispElement = document.getElementById("disp_type");
+            console.log(dispElement.value)
+            if (dispElement.value === "update")
+                recoged = [];
             recoged.push(str);
 
             let tmpStr = "<li>";
@@ -119,7 +139,10 @@
                 tmpStr = tmpStr + str;
             }
             tmpStr = tmpStr + "</li>";
-            document.getElementById('result').innerHTML += tmpStr;
+            if (dispElement.value === "update")
+                document.getElementById('result').innerHTML = tmpStr;
+            else
+                document.getElementById('result').innerHTML += tmpStr;
         }
         startTick();
     </script>
